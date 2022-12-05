@@ -1,0 +1,3 @@
+steps:
+- name: 'build-app'
+  args: ['npm', 'install', '--production']
