@@ -4,7 +4,7 @@ const { app: { port } } = require('./config');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello Marishka!');
+  res.send('Autodeploy 2');
 });
 
 app.get('health', (req, res) => res.send('OK'));
