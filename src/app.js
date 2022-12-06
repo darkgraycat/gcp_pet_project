@@ -4,7 +4,7 @@ const { app: { port }, db } = require('./config');
 
 (async (app, db, config) => {
   const { port } = config;
-  await db.connect();
+  // await db.connect();
 
   app.get('/', (req, res) => {
     res.send('Home');
@@ -13,10 +13,11 @@ const { app: { port }, db } = require('./config');
   app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const data = await db.query(`select * from users where id = ${id}`);
-      if (!data.rows.length) return res.status(404).send('Not found');
+      // const data = await db.query(`select * from users where id = ${id}`);
+      // if (!data.rows.length) return res.status(404).send('Not found');
 
-      return res.json(data.rows[0]);
+      return res.send(`User: ${id}`);
+      // return res.json(data.rows[0]);
     } catch ({ message }) {
       return res.status(500).send(message);
     }
@@ -33,7 +34,7 @@ const { app: { port }, db } = require('./config');
   });
 
   ['SIGINT', 'SIGTERM'].forEach((signal) => process.on(signal, () => {
-    db.end();
+    // db.end();
     console.info(`Server recieves signal ${signal}`);
     process.exit(0);
   }));
