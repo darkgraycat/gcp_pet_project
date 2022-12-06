@@ -1,6 +1,7 @@
 const app = {
-  env: process.env.NODE_ENV,
-  port: process.env.PORT
+  env: process.env.NODE_ENV || 'local',
+  port: process.env.PORT || 8080,
+  request_timeout: Number(process.env.REQUEST_TIMEOUT_MS) || 30000
 };
 
 const db = {
