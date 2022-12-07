@@ -1,44 +1,36 @@
 const express = require('express');
-const { Client } = require('pg');
+const mysql = require('mysql2/promise');
+
 const { app: { port }, db } = require('./config');
+const routes = require('./routes');
 
-(async (app, db, config) => {
-  const { port } = config;
-  await db.connect();
+console.warn(JSON.stringify(db));
 
-  app.get('/', (req, res) => {
-    res.send('Home');
+(async (app, port, db_config) => {
+  // connect to database
+  const connection = await mysql.createConnection(db_config);
+
+  // setup routes
+  routes(app, connection);
+
+  // start server
+  app.listen(port, () => {
+    console.info(`Server listening on port ${port}`);
   });
 
-  app.get('/users/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const data = await db.query(`select * from users where id = ${id}`);
-      if (!data.rows.length) return res.status(404).send('Not found');
-
-      return res.json(data.rows[0]);
-    } catch ({ message }) {
-      return res.status(500).send(message);
-    }
-  });
-
-  app.get('/health', (req, res) => res.send('OK'));
-
-  const server = app.listen(port, () => {
-    console.info(`Server listening on port ${port}...`);
-  });
-
+  // handle unhandled rejections
   process.on('unhandledRejection', (reason) => {
     console.error(`Unhandled rejection ${reason}`);
   });
 
+  // listen to termination signals
   ['SIGINT', 'SIGTERM'].forEach((signal) => process.on(signal, () => {
-    db.end();
+    connection.end();
     console.info(`Server recieves signal ${signal}`);
     process.exit(0);
   }));
 })(
   express(),
-  new Client(db),
-  { port }
+  port,
+  db,
 );
