@@ -6,10 +6,11 @@ module.exports = (app, db) => {
   app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const [rows] = await db.query(`select * from users where id = ${id}`);
-      if (!rows.length) return res.status(404).send('Not found');
+      // const [rows] = await db.query(`select * from users where id = ${id}`);
+      // if (!rows.length) return res.status(404).send('Not found');
 
-      return res.json(rows[0]);
+      // return res.json(rows[0]);
+      return res.send(`Response mock. User: ${id}`);
     } catch ({ message }) {
       return res.status(500).send(message);
     }

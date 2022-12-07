@@ -8,10 +8,10 @@ console.warn(JSON.stringify(db));
 
 (async (app, port, db_config) => {
   // connect to database
-  const connection = await mysql.createConnection(db_config);
+  // const connection = await mysql.createConnection(db_config);
 
   // setup routes
-  routes(app, connection);
+  routes(app, null);
 
   // start server
   app.listen(port, () => {
@@ -25,7 +25,7 @@ console.warn(JSON.stringify(db));
 
   // listen to termination signals
   ['SIGINT', 'SIGTERM'].forEach((signal) => process.on(signal, () => {
-    connection.end();
+    // connection.end();
     console.info(`Server recieves signal ${signal}`);
     process.exit(0);
   }));
