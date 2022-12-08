@@ -10,6 +10,7 @@ module.exports = (app, db) => {
       if (!rows.length) return res.status(404).send('Not found');
 
       return res.json(rows[0]);
+      // return res.send(`Response mock. User: ${id}`);
     } catch ({ message }) {
       return res.status(500).send(message);
     }
